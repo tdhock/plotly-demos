@@ -1,0 +1,74 @@
+ggplotly demos
+========================================================
+
+In this RPub I will explain how to use the new ggplotly function in library(plotly), which allows you to upload ggplots to the https://plot.ly web app, for sharing and interactive analysis.
+
+```{r echo=FALSE}
+options(bitmapType="cairo")
+```
+
+As a useR and reader of RPubs, you are probably already familiar with the ggplot2 package, which can be used to produce a wide variety of plots,
+such as this classic visualization of Fisher's iris data:
+
+```{r}
+library(ggplot2)
+ggiris <- qplot(Petal.Width, Sepal.Length, data=iris, color=Species)
+print(ggiris)
+```
+
+Wouldn't it be nice to be able to directly upload this ggplot to https://plot.ly for interactive annotation, editing, and sharing with your colleagues and the public? Well, now you can! Read on.
+
+If you don't already have the newest version of the plotly package on your computer, install it using the devtools package:
+
+```{r, eval=FALSE}
+install.packages("devtools")
+library(devtools)
+install_github("plotly", "ropensci")
+```
+
+Then load the plotly package:
+
+```{r}
+library(plotly)
+```
+
+If you don't already have a plotly account, get one!
+
+```{r, eval=FALSE}
+signup("new_username", "your_email@domain.com")
+```
+
+That should have responded with your new key. Use that to create a plotly interface object:
+
+```{r, eval=FALSE}
+py <- plotly("new_username", "YOUR_KEY")
+```
+
+Now, the moment you have been waiting for: ggplots can be
+uploaded to plotly using the new py$ggplotly function. Give it a ggplot, and it will upload it to https://plot.ly -- it is that simple!
+
+```{r, plotly=TRUE}
+py$ggplotly(ggiris)
+```
+
+Note that if you are on the R command line, this will open a new web browser tab with the uploaded plotly. And if you write this in an Rmd document, the plotly will be embedded, as long as you specify the plotly=TRUE chunk option (see https://github.com/tdhock/plotly-demos/ggplotly-iris-canada.Rmd).
+
+```{r, fig.width=15, tidy=FALSE}
+data(canada.cities, package="maps")
+viz <- ggplot(canada.cities, aes(long, lat))+
+  borders(regions="canada", name="borders")+
+  coord_equal()+
+  geom_point(aes(text=name, size=pop), colour="red",
+               alpha=1/2, name="cities")
+print(viz)
+```
+
+Note how we used name="borders" and name="cities" -- this is not standard ggplot2, so is just ignored when rendering the plot above. However, it allows us to name the traces that we upload to plotly:
+
+```{r, plotly=TRUE}
+py$ggplotly(viz)
+```
+
+As of writing (14 March 2014) only a few simple ggplot types are supported by ggplotly, but please don't hesitate to post issues: https://github.com/ropensci/plotly/issues.
+
+Thanks for reading and happy plotly-ing!

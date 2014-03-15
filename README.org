@@ -1,0 +1,7 @@
+* Demos of plotly and ggplotly
+
+This repos contains source code for RPubs that show how you can upload
+ggplots from library(ggplot2) in R to https://plot.ly using
+library(plotly).
+
+http://rpubs.com/tdhock/hello-ggplotly
